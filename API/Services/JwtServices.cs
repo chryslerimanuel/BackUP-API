@@ -22,19 +22,26 @@ namespace API.Services
             _expDate = config.GetSection("JwtConfig").GetSection("expirationInMinutes").Value;
         }
 
-        // proses pembuatan token
         public string GenerateSecurityToken(LoginVM loginVM)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_secret);
 
+
+            List<Claim> claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Email, loginVM.Email),
+                new Claim(ClaimTypes.Name, loginVM.FullName)
+            };
+
+            foreach (var role in loginVM.Roles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
+
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new[]
-                {
-                    new Claim(ClaimTypes.Email, loginVM.Email),
-                    new Claim(ClaimTypes.Name, loginVM.FullName)
-                }),
+                Subject = new ClaimsIdentity(claims),
                 Expires = DateTime.UtcNow.AddMinutes(double.Parse(_expDate)),
                 SigningCredentials = new SigningCredentials(
                     new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
-using Newtonsoft.Json;
 using System.Threading.Tasks;
 
 namespace API.Models
@@ -17,7 +16,6 @@ namespace API.Models
         [Required]
         public string Name { get; set; }
 
-        [JsonIgnore]
-        public virtual List<RoleAccount> RoleAccounts { get; set; } = new List<RoleAccount>();
+        public virtual List<AccountRole> AccountRoles { get; set; }
     }
 }

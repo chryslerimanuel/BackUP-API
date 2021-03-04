@@ -6,11 +6,10 @@ using System.Threading.Tasks;
 
 namespace API.Repository.Interface
 {
-    interface IDapperRepository<Entity, Parameters>
-        where Entity : class
-        where Parameters : DynamicParameters
+    interface IDapperRepository<Entity>
+        where Entity : class     
     {
-        Entity ExecSP(string spName, Parameters parameters);
-        IEnumerable<Entity> ExecSPList(string spName, Parameters parameters);
+        Entity ExecSP(string spName, DynamicParameters parameters);
+        IEnumerable<Entity> ExecSPList(string spName, DynamicParameters parameters);
     }
 }

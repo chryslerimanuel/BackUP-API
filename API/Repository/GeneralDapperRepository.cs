@@ -12,27 +12,26 @@ using System.Threading.Tasks;
 
 namespace API.Repository
 {
-    public class GeneralDapperRepository<Entity, Parameters> : IDapperRepository<Entity, Parameters>
+    public class GeneralDapperRepository<Entity> : IDapperRepository<Entity>
          where Entity : class
-         where Parameters : DynamicParameters
     {
         private readonly IConfiguration _config;
         private readonly IDbConnection _connection;
 
-        public GeneralDapperRepository(IConfiguration config)
+        public GeneralDapperRepository(IConfiguration config) 
         {
-            _config = config;
+            _config = config; 
             _connection = new SqlConnection(_config.GetConnectionString("MyContext"));
         }
 
-        public Entity ExecSP(string spName, Parameters parameters)
+        public Entity ExecSP(string spName, DynamicParameters parameters = null)
         {
             return _connection.Query<Entity>(spName, parameters, commandType: CommandType.StoredProcedure).FirstOrDefault();
         }
 
-        public IEnumerable<Entity> ExecSPList(string spName, Parameters parameters)
+        public IEnumerable<Entity> ExecSPList(string spName, DynamicParameters parameters = null)
         {
-            return _connection.Query<Entity>(spName, parameters, commandType: CommandType.StoredProcedure).ToList();
+            return _connection.Query<Entity>(spName, parameters, commandType: CommandType.StoredProcedure);
         }
     }
 }

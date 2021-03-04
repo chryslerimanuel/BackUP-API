@@ -27,11 +27,9 @@ namespace API.Controllers
             _configuration = configuration;
         }
 
-        [HttpPost]
-        [Route("Login")]
+        [HttpPost("Login")]
         public ActionResult<Account> Login(LoginVM loginVM)
         {
-            //var data = accountRepository.Login(loginVM.Email, loginVM.Password);
             var data = accountRepository.Login(loginVM);
 
             if (data != null)
@@ -39,27 +37,11 @@ namespace API.Controllers
                 var jwt = new JwtServices(_configuration);
                 var token = jwt.GenerateSecurityToken(data);
 
-                return Ok(new { status = HttpStatusCode.OK, data, message = "Berhasil Login", token });
+                return Ok(new { message = "Berhasil Login", token });
             }
             else
             {
-                return NotFound(new { status = HttpStatusCode.NotFound, message = "Data Tidak Ditemukan" });
-            }
-        }
-
-        [HttpPost]
-        [Route("Register")]
-        public ActionResult<Account> Register(RegisterVM entity)
-        {
-            var data = accountRepository.Register(entity);
-
-            if (data != 0)
-            {
-                return Ok(new { status = HttpStatusCode.OK, data, message = "Berhasil Buat Akun" });
-            }
-            else
-            {
-                return StatusCode(500, new { status = HttpStatusCode.BadRequest, message = "Gagal Buat Akun" });
+                return BadRequest(new { status = HttpStatusCode.BadRequest, message = "Gagal Login" });
             }
         }
     }

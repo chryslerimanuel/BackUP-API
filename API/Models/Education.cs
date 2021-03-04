@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace API.Models
@@ -28,6 +28,6 @@ namespace API.Models
         public virtual University University { get; set; }
 
         [JsonIgnore]
-        public virtual List<Profiling> Profiling { get; set; } = new List<Profiling>();
+        public virtual List<Profiling> Profiling { get; set; }
     }
 }

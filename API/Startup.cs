@@ -14,8 +14,8 @@ using Microsoft.EntityFrameworkCore;
 using API.Context;
 using API.Repository.Data;
 using Microsoft.OpenApi.Models;
-using API.Middleware;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using API.Middleware;
 
 namespace API
 {
@@ -39,7 +39,7 @@ namespace API
             services.AddScoped<EducationRepository>();
             services.AddScoped<ProfilingRepository>();
             services.AddScoped<RoleRepository>();
-            services.AddScoped<RoleAccountRepository>();
+            services.AddScoped<AccountRoleRepository>();
 
             services.AddDbContext<MyContext>(options =>
             options.UseLazyLoadingProxies().UseSqlServer(Configuration.GetConnectionString("MyContext")));
@@ -48,20 +48,11 @@ namespace API
                 .AddNewtonsoftJson(options =>
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
                 );
-
+            
             services.AddMvc()
                 .AddNewtonsoftJson(options =>
                 options.SerializerSettings.DefaultValueHandling = Newtonsoft.Json.DefaultValueHandling.Ignore
                 );
-
-            //services.AddSwaggerGen(options =>
-            //{
-            //    options.SwaggerDoc("v1", new OpenApiInfo
-            //    {
-            //        Title = "Swagger API Documentation",
-            //        Version = "v1"
-            //    });
-            //});
 
             services.AddTokenAuthentication(Configuration);
 
@@ -87,14 +78,14 @@ namespace API
                 {
                     {securityScheme, new string[] { }}
                 });
-                        var basicSecurityScheme = new OpenApiSecurityScheme
-                        {
-                            Type = SecuritySchemeType.Http,
-                            Scheme = "basic",
-                            Reference = new OpenApiReference { Id = "BasicAuth", Type = ReferenceType.SecurityScheme }
-                        };
-                        c.AddSecurityDefinition(basicSecurityScheme.Reference.Id, basicSecurityScheme);
-                        c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                            var basicSecurityScheme = new OpenApiSecurityScheme
+                            {
+                                Type = SecuritySchemeType.Http,
+                                Scheme = "basic",
+                                Reference = new OpenApiReference { Id = "BasicAuth", Type = ReferenceType.SecurityScheme }
+                            };
+                            c.AddSecurityDefinition(basicSecurityScheme.Reference.Id, basicSecurityScheme);
+                            c.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {
                     {basicSecurityScheme, new string[] { }}
                 });
@@ -122,11 +113,8 @@ namespace API
                 endpoints.MapControllers();
             });
 
-            // Enable middleware to serve generated Swagger as a JSON endpoint.
             app.UseSwagger();
 
-            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
-            // specifying the Swagger JSON endpoint.
             app.UseSwaggerUI(options =>
             {
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");

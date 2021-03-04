@@ -11,6 +11,7 @@ namespace API.Repository.Data
     {
         public EducationRepository(MyContext myContext) : base(myContext)
         {
+
         }
     }
 }

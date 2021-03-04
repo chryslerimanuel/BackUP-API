@@ -2,11 +2,11 @@
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace API.Middleware
 {
@@ -32,8 +32,6 @@ namespace API.Middleware
                     IssuerSigningKey = new SymmetricSecurityKey(key),
                     ValidateIssuer = false,
                     ValidateAudience = false,
-                    //ValidateIssuer = true,
-                    //ValidateAudience = true,
                     ValidIssuer = "localhost",
                     ValidAudience = "localhost"
                 };

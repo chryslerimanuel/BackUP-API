@@ -13,9 +13,9 @@ namespace API.ViewModels
 
         public string FullName { get; set; }
 
-        //public IEnumerable<string> Role { get; set; }
+        public IEnumerable<string> Roles { get; set; } //buat nampilin di json 
 
-        public string Role { get; set; }
+        public string RoleName { get; set; } //nama kolom di sp
 
     }
 }

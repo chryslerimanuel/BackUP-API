@@ -14,6 +14,7 @@ namespace API.Repository
     {
         private readonly MyContext myContext;
         private readonly DbSet<Entity> entities;
+        //readonly string errorMessage = string.Empty;
 
         public GeneralRepository(MyContext myContext)
         {

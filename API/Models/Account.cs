@@ -1,9 +1,9 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace API.Models
@@ -24,7 +24,6 @@ namespace API.Models
         [JsonIgnore]
         public virtual Profiling Profiling { get; set; }
 
-        [JsonIgnore]
-        public virtual List<RoleAccount> RoleAccounts { get; set; } = new List<RoleAccount>();
+        public virtual List<AccountRole> AccountRoles { get; set; }
     }
 }

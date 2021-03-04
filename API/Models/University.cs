@@ -1,10 +1,10 @@
-﻿using Newtonsoft.Json;
+﻿//using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
-//using System.Text.Json.Serialization;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace API.Models
@@ -20,6 +20,6 @@ namespace API.Models
         public string Name { get; set; }
 
         [JsonIgnore]
-        public virtual List<Education> Education { get; set; } = new List<Education>();
+        public virtual List<Education> Education { get; set; }
     }
 }

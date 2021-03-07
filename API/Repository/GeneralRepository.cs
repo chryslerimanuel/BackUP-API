@@ -1,10 +1,13 @@
-﻿using API.Context;
+using API.Context;
 using API.Repository.Interface;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Configuration;
 using System.Threading.Tasks;
+using System.Data;
+using Microsoft.Extensions.Configuration;
 
 namespace API.Repository
 {
@@ -14,7 +17,6 @@ namespace API.Repository
     {
         private readonly MyContext myContext;
         private readonly DbSet<Entity> entities;
-        //readonly string errorMessage = string.Empty;
 
         public GeneralRepository(MyContext myContext)
         {
@@ -22,25 +24,29 @@ namespace API.Repository
             entities = myContext.Set<Entity>();
         }
 
+        public int Delete(Entity entity)
+        {
+            if (entity == null)
+                throw new ArgumentNullException("entity");
+            entities.Remove(entity);
+            var result = myContext.SaveChanges();
+            return result;
+        }
+
         public IEnumerable<Entity> Get()
         {
-            var result = entities.ToList();
-            return result;
+            return entities.ToList();
         }
 
         public Entity Get(Key key)
         {
-            var result = entities.Find(key);
-            return result;
+            return entities.Find(key);
         }
 
-        public int Create(Entity entity)
+        public int Insert(Entity entity)
         {
             if (entity == null)
-            {
                 throw new ArgumentNullException("entity");
-            }
-
             entities.Add(entity);
             var result = myContext.SaveChanges();
             return result;
@@ -49,24 +55,8 @@ namespace API.Repository
         public int Update(Entity entity)
         {
             if (entity == null)
-            {
                 throw new ArgumentNullException("entity");
-            }
-
             myContext.Entry(entity).State = EntityState.Modified;
-            var result = myContext.SaveChanges();
-            return result;
-        }
-
-        public int Delete(Key key)
-        {
-            if (key == null)
-            {
-                throw new ArgumentNullException("entity");
-            }
-
-            Entity entity = entities.Find(key);
-            entities.Remove(entity);
             var result = myContext.SaveChanges();
             return result;
         }

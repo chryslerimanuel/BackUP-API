@@ -8,30 +8,23 @@ namespace API.ViewModels
 {
     public class RegisterVM
     {
-        [Required(ErrorMessage = "This field is required")]
-        public string NIK { get; set; }
-
-        [Required(ErrorMessage = "This field is required")]
+        public string Nik { get; set; }
         public string FirstName { get; set; }
-
-        [Required(ErrorMessage = "This field is required")]
         public string LastName { get; set; }
-
-        [Required(ErrorMessage = "This field is required")]
         [DataType(DataType.Date)]
         public DateTime BirthDate { get; set; }
+        public int Salary { get; set; }
+        public string Phone { get; set; }
 
-        [Required(ErrorMessage = "This field is required")]
         [DataType(DataType.EmailAddress)]
+        [Required(ErrorMessage = "Email is Required")]
         public string Email { get; set; }
 
-        [Required(ErrorMessage = "This field is required")]
         [DataType(DataType.Password)]
+        [Required(ErrorMessage = "Password is Required")]
         public string Password { get; set; }
 
-        [Required(ErrorMessage = "This field is required")]
-        [DataType(DataType.Password)]
-        [CompareAttribute("Password", ErrorMessage = "Password doesn't not match")]
-        public string ConfirmPassword { get; set; }
+        [Required(ErrorMessage = "Role is Required")]
+        public string RoleName { get; set; }
     }
 }

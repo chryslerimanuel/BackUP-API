@@ -1,4 +1,4 @@
-﻿using API.Models;
+using API.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,8 +10,8 @@ namespace API.Repository.Interface
     {
         IEnumerable<Entity> Get();
         Entity Get(Key key);
-        int Create(Entity entity);
+        int Insert(Entity entity);
         int Update(Entity entity);
-        int Delete(Key key);
+        int Delete(Entity entity);
     }
 }

@@ -1,4 +1,4 @@
-﻿using API.ViewModels;
+using API.ViewModels;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -26,25 +26,16 @@ namespace API.Services
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_secret);
-
-
-            List<Claim> claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.Email, loginVM.Email),
-                new Claim(ClaimTypes.Name, loginVM.FullName)
-            };
-
-            foreach (var role in loginVM.Roles)
-            {
-                claims.Add(new Claim(ClaimTypes.Role, role));
-            }
-
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(claims),
+                Subject = new ClaimsIdentity(new[]
+                {
+                    new Claim(ClaimTypes.Email, loginVM.Email),
+                    new Claim(ClaimTypes.Name, loginVM.FullName),
+                    new Claim(ClaimTypes.Role, loginVM.RoleName)
+                }),
                 Expires = DateTime.UtcNow.AddMinutes(double.Parse(_expDate)),
-                SigningCredentials = new SigningCredentials(
-                    new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
 
             var token = tokenHandler.CreateToken(tokenDescriptor);

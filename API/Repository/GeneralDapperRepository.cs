@@ -1,4 +1,3 @@
-﻿using API.Context;
 using API.Repository.Interface;
 using Dapper;
 using Microsoft.Data.SqlClient;
@@ -12,26 +11,28 @@ using System.Threading.Tasks;
 
 namespace API.Repository
 {
-    public class GeneralDapperRepository<Entity> : IDapperRepository<Entity>
-         where Entity : class
+    public class GeneralDapperRepository<Entity> : IDapperRepository<Entity> where Entity : class
     {
-        private readonly IConfiguration _config;
+        private readonly IConfiguration _configuration;
         private readonly IDbConnection _connection;
 
-        public GeneralDapperRepository(IConfiguration config) 
+        public GeneralDapperRepository(IConfiguration configuration)
         {
-            _config = config; 
-            _connection = new SqlConnection(_config.GetConnectionString("MyContext"));
+            _configuration = configuration;
+            _connection = new SqlConnection(_configuration.GetConnectionString("APIContext"));
         }
 
-        public Entity ExecSP(string spName, DynamicParameters parameters = null)
+        public Entity Query(string query, DynamicParameters parameters)
         {
-            return _connection.Query<Entity>(spName, parameters, commandType: CommandType.StoredProcedure).FirstOrDefault();
+            var result = _connection.Query<Entity>(query, parameters, commandType: CommandType.StoredProcedure).SingleOrDefault();
+            return result;
         }
 
-        public IEnumerable<Entity> ExecSPList(string spName, DynamicParameters parameters = null)
+        public IEnumerable<Entity> Get(string query, DynamicParameters parameters)
         {
-            return _connection.Query<Entity>(spName, parameters, commandType: CommandType.StoredProcedure);
+            var result = _connection.Query<Entity>(query, parameters, commandType: CommandType.StoredProcedure).ToList();
+            return result;
         }
+
     }
 }

@@ -1,0 +1,54 @@
+﻿@*@model ResponseVM<Person>*@
+
+@{ Layout = "_Layout"; ViewBag.Title = "All Person";}
+
+<h2>Person Table</h2>
+
+<table id="table-person" class="table table-sm table-striped table-bordered m-2">
+    <thead>
+        <tr>
+            <th>NIK</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Phone</th>
+            <th>Birth Date</th>
+            <th>Salary</th>
+            <th>Email</th>
+            <th>Button</th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#table-person').DataTable({
+            ajax: {
+                url: 'Person/Get',
+                type: 'get',
+                datatype: 'json',
+                dataSrc: 'result'
+            },
+            columnDefs: [
+                { targets: [0, 1, 2], searchable: true },
+                { targets: '_all', searchable: false }
+            ],
+            columns: [
+                { data: 'nik' },
+                { data: 'firstName' },
+                { data: 'lastName' },
+                { data: 'phone' },
+                { data: 'birthDate' },
+                { data: 'salary' },
+                { data: 'email' },
+                {
+                    data: "nik", render: function (data, type, row, meta) {
+                        return "<button class='btn btn-success' style='margin-right:5px; onclick=Edit' id='edit'><i class='far fa-edit'></i> Edit</button>"
+                            + "<button class='btn btn-danger' style='margin-right:5px; onclick=Delete' id='delete'><i class='far fa-trash-alt'></i> Delete</button>";
+                    }
+                }
+            ]
+        });
+    });
+</script>

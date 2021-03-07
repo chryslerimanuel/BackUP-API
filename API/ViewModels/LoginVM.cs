@@ -1,5 +1,8 @@
-﻿using System;
+using API.Models;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -7,15 +10,14 @@ namespace API.ViewModels
 {
     public class LoginVM
     {
-        public string Email { get; set; }
+        public string Email { set; get; }
 
-        public string Password { get; set; }
+        public string Password { set; get; }
 
-        public string FullName { get; set; }
+        public string FullName { set; get; }
 
-        public IEnumerable<string> Roles { get; set; } //buat nampilin di json 
+        public IEnumerable<string> Roles { set; get; }
 
-        public string RoleName { get; set; } //nama kolom di sp
-
+        public string RoleName { set; get; }
     }
 }

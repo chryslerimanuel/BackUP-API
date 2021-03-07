@@ -4,56 +4,63 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
 namespace API.Context
 {
     public class MyContext : DbContext
     {
         public MyContext(DbContextOptions<MyContext> options) : base(options)
         {
+
         }
 
-        public DbSet<Person> Persons { get; set; }
-        public DbSet<Account> Accounts { get; set; }
-        public DbSet<Profiling> Profilings { get; set; }
-        public DbSet<Education> Educations { get; set; }
-        public DbSet<University> Universities { get; set; }
-        public DbSet<AccountRole> AccountRoles { get; set; }
+        public DbSet<Person> Persons { set; get; }
+
+        public DbSet<Education> Educations { set; get; }
+
+        public DbSet<Account> Accounts { set; get; }
+
+        public DbSet<University> Universities { set; get; }
+
+        public DbSet<Profiling> Profilings { set; get; }
+
+        public DbSet<Role> Roles { set; get; }
+
+        public DbSet<AccountRole> AccountRoles { set; get; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Person>()
-               .HasOne(person => person.Account)
-               .WithOne(account => account.Person)
-               .HasForeignKey<Account>(account => account.NIK);
+                .HasOne(a => a.Account)
+                .WithOne(b => b.Person)
+                .HasForeignKey<Account>(b => b.NIK);
 
             modelBuilder.Entity<Account>()
-               .HasOne(account => account.Profiling)
-               .WithOne(profiling => profiling.Account)
-               .HasForeignKey<Profiling>(profiling => profiling.NIK);
+                .HasOne(a => a.Profiling)
+                .WithOne(b => b.Account)
+                .HasForeignKey<Profiling>(b => b.NIK);
 
             modelBuilder.Entity<Profiling>()
-               .HasOne(profiling => profiling.Education)
-               .WithMany(education => education.Profiling)
-               .HasForeignKey(profiling => profiling.Education_Id);
+                .HasOne(c => c.Education)
+                .WithMany(e => e.Profilings);
 
-            modelBuilder.Entity<Education>()
-               .HasOne(education => education.University)
-               .WithMany(university => university.Education)
-               .HasForeignKey(education => education.University_Id);
+            modelBuilder.Entity<University>()
+                .HasMany(c => c.Educations)
+                .WithOne(e => e.University);
 
             modelBuilder.Entity<AccountRole>()
-               .HasKey(ra => new { ra.Role_Id, ra.Account_NIK });
+                .HasKey(ar => new { ar.NIK, ar.RoleID });
 
             modelBuilder.Entity<AccountRole>()
-               .HasOne(ra => ra.Role)
-               .WithMany(role => role.AccountRoles)
-               .HasForeignKey(ra => ra.Role_Id);
-
+                .HasOne(a => a.Account)
+                .WithMany(ar => ar.AccountRoles)
+                .HasForeignKey(a => a.NIK);
+            
             modelBuilder.Entity<AccountRole>()
-               .HasOne(ra => ra.Account)
-               .WithMany(account => account.AccountRoles)
-               .HasForeignKey(ra => ra.Account_NIK);
+                .HasOne(r => r.Role)
+                .WithMany(ar => ar.AccountRoles)
+                .HasForeignKey(r => r.RoleID);
         }
+
     }
 }

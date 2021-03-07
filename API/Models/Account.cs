@@ -1,9 +1,9 @@
-﻿using System;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace API.Models
@@ -11,19 +11,16 @@ namespace API.Models
     [Table("Tb_M_Account")]
     public class Account
     {
-        [Key]
-        [Required(ErrorMessage = "This field is required")]
+        [Key][Required]
         public string NIK { get; set; }
-
-        [Required(ErrorMessage = "This field is required")]
-        public string Password { get; set; }
-        
+        [Required]
+        [DataType(DataType.Password)]
+        public string AccountPassword { get; set; }
         [JsonIgnore]
         public virtual Person Person { get; set; }
-
         [JsonIgnore]
         public virtual Profiling Profiling { get; set; }
-
-        public virtual List<AccountRole> AccountRoles { get; set; }
+        [JsonIgnore]
+        public virtual ICollection<AccountRole> AccountRoles { get; set; }
     }
 }

@@ -24,7 +24,7 @@ namespace API.Migrations
                     b.Property<string>("NIK")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Password")
+                    b.Property<string>("AccountPassword")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -35,40 +35,38 @@ namespace API.Migrations
 
             modelBuilder.Entity("API.Models.AccountRole", b =>
                 {
-                    b.Property<int>("Role_Id")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Account_NIK")
+                    b.Property<string>("NIK")
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("Role_Id", "Account_NIK");
+                    b.Property<int>("RoleID")
+                        .HasColumnType("int");
 
-                    b.HasIndex("Account_NIK");
+                    b.HasKey("NIK", "RoleID");
 
-                    b.ToTable("Tb_M_AccountRole");
+                    b.HasIndex("RoleID");
+
+                    b.ToTable("Tb_T_AccountRole");
                 });
 
             modelBuilder.Entity("API.Models.Education", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<string>("EducationID")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Degree")
+                    b.Property<string>("EducationDegree")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("GPA")
+                    b.Property<string>("EducationGPA")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("University_Id")
+                    b.Property<int?>("UniversityID")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.HasKey("EducationID");
 
-                    b.HasIndex("University_Id");
+                    b.HasIndex("UniversityID");
 
                     b.ToTable("Tb_M_Education");
                 });
@@ -82,6 +80,7 @@ namespace API.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FirstName")
@@ -89,6 +88,10 @@ namespace API.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Phone")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -105,44 +108,44 @@ namespace API.Migrations
                     b.Property<string>("NIK")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("Education_Id")
-                        .HasColumnType("int");
+                    b.Property<string>("EducationID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("NIK");
 
-                    b.HasIndex("Education_Id");
+                    b.HasIndex("EducationID");
 
-                    b.ToTable("Tb_M_Profiling");
+                    b.ToTable("Tb_T_Profiling");
                 });
 
             modelBuilder.Entity("API.Models.Role", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("RoleID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Name")
-                        .IsRequired()
+                    b.Property<string>("RoleName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.HasKey("RoleID");
 
                     b.ToTable("Tb_M_Role");
                 });
 
             modelBuilder.Entity("API.Models.University", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("UniversityID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Name")
+                    b.Property<string>("UniversityName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.HasKey("UniversityID");
 
                     b.ToTable("Tb_M_University");
                 });
@@ -162,13 +165,13 @@ namespace API.Migrations
                 {
                     b.HasOne("API.Models.Account", "Account")
                         .WithMany("AccountRoles")
-                        .HasForeignKey("Account_NIK")
+                        .HasForeignKey("NIK")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("API.Models.Role", "Role")
                         .WithMany("AccountRoles")
-                        .HasForeignKey("Role_Id")
+                        .HasForeignKey("RoleID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -180,10 +183,8 @@ namespace API.Migrations
             modelBuilder.Entity("API.Models.Education", b =>
                 {
                     b.HasOne("API.Models.University", "University")
-                        .WithMany("Education")
-                        .HasForeignKey("University_Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("Educations")
+                        .HasForeignKey("UniversityID");
 
                     b.Navigation("University");
                 });
@@ -191,8 +192,8 @@ namespace API.Migrations
             modelBuilder.Entity("API.Models.Profiling", b =>
                 {
                     b.HasOne("API.Models.Education", "Education")
-                        .WithMany("Profiling")
-                        .HasForeignKey("Education_Id")
+                        .WithMany("Profilings")
+                        .HasForeignKey("EducationID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -216,7 +217,7 @@ namespace API.Migrations
 
             modelBuilder.Entity("API.Models.Education", b =>
                 {
-                    b.Navigation("Profiling");
+                    b.Navigation("Profilings");
                 });
 
             modelBuilder.Entity("API.Models.Person", b =>
@@ -231,7 +232,7 @@ namespace API.Migrations
 
             modelBuilder.Entity("API.Models.University", b =>
                 {
-                    b.Navigation("Education");
+                    b.Navigation("Educations");
                 });
 #pragma warning restore 612, 618
         }
